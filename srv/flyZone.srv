@@ -1,0 +1,5 @@
+uint8 uav_id
+bool hold_on
+---
+int8 meters
+bool status

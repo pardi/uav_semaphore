@@ -1,12 +1,16 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(uav_semaphore)
 
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   std_msgs
+  genmsg
 )
 
 ## System dependencies are found with CMake's conventions
@@ -49,12 +53,12 @@ find_package(catkin REQUIRED COMPONENTS
 #   Message2.msg
 # )
 
-## Generate services in the 'srv' folder
-# add_service_files(
-#   FILES
-#   Service1.srv
-#   Service2.srv
-# )
+# Generate services in the 'srv' folder
+add_service_files(
+  FILES
+  holdDropZone.srv
+  flyZone.srv
+)
 
 ## Generate actions in the 'action' folder
 # add_action_files(
@@ -63,11 +67,11 @@ find_package(catkin REQUIRED COMPONENTS
 #   Action2.action
 # )
 
-## Generate added messages and services with any dependencies listed here
-# generate_messages(
-#   DEPENDENCIES
-#   std_msgs
-# )
+# Generate added messages and services with any dependencies listed here
+generate_messages(
+  DEPENDENCIES
+  std_msgs
+)
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
@@ -114,6 +118,7 @@ catkin_package(
 # include_directories(include)
 include_directories(
   ${catkin_INCLUDE_DIRS}
+  include
 )
 
 ## Declare a C++ library
@@ -127,16 +132,17 @@ include_directories(
 # add_dependencies(uav_semaphore ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Declare a C++ executable
-# add_executable(uav_semaphore_node src/uav_semaphore_node.cpp)
+add_executable(uav_semaphore_node src/main.cpp src/uavsemaphore.cpp)
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
-# add_dependencies(uav_semaphore_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(uav_semaphore_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS} uav_semaphore_gencpp)
+
 
 ## Specify libraries to link a library or executable target against
-# target_link_libraries(uav_semaphore_node
-#   ${catkin_LIBRARIES}
-# )
+target_link_libraries(uav_semaphore_node
+  ${catkin_LIBRARIES}
+)
 
 #############
 ## Install ##
